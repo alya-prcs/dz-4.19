@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список продуктів</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+    .product-list { list-style: none; padding: 0; }
+    .product-item {
+      background: #fff;
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .name { margin: 0; font-size: 20px; color: #333; }
+    .price { color: green; margin: 5px 0; }
+    .description { color: #555; }
+    #search { width: 100%; padding: 10px; margin-bottom: 15px; }
+  </style>
+</head>
+<body>
+  <h1>Продукти</h1>
+  <input type="text" id="search" placeholder="Пошук продуктів...">
+  <ul id="products" class="product-list"></ul>
+
+  <script>
+   // ----------------- Продукти -----------------
+    const products = [
+      { name: "Ноутбук", price: 20000, description: "Потужний і компактний." },
+      { name: "Смартфон", price: 12000, description: "З якісною камерою." },
+      { name: "Навушники", price: 2500, description: "Бездротові з шумозаглушенням." },
+      { name: "Монітор", price: 7000, description: "Full HD, 24 дюйми." }
+    ];
+
+    const productContainer = document.getElementById("products");
+    const searchInput = document.getElementById("search");
+
+    async function renderProducts(items) {
+      try {
+        productContainer.innerHTML = items.map(p => `
+          <div class="product-item">
+            <h2>${p.name}</h2>
+            <p>Ціна: ${p.price} грн</p>
+            <p>${p.description}</p>
+          </div>
+        `).join("");
+      } catch (err) {
+        console.error("Помилка рендера продуктів:", err);
+      }
+    }
+
+    renderProducts(products);
+
+    searchInput.addEventListener("input", async () => {
+      try {
+        const query = searchInput.value.toLowerCase();
+        const filtered = products.filter(p =>
+          p.name.toLowerCase().includes(query) ||
+          p.description.toLowerCase().includes(query)
+        );
+        await renderProducts(filtered);
+      } catch (err) {
+        console.error("Помилка пошуку:", err);
+      }
+    });
+  </script>
+</body>
+</html>
